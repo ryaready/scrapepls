@@ -4,15 +4,18 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-def build_url(base_url = url , ur_pt2 = url2, page = 1):
-    return f"{base_url}page={page}{ur_pt2}"
+def setup_chrome_driver():
+    chrome_options = webdriver.ChromeOptions()
+    # Provide the path to the ChromeDriver executable without spaces and escape characters
+    chrome_driver_path = '/Users/aishwaryaiyer/Desktop/chrome-mac-x64/chromedriver'
+    chrome_options.binary_location = '/Users/aishwaryaiyer/Desktop/chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome'  # Path to the Chrome application
+    driver = webdriver.Chrome(executable_path=chrome_driver_path, options=chrome_options)
+    return driver
 
 
 def scrape_stackoverflow_results(url):
-    driver = webdriver.Chrome(r'/Users/aishwaryaiyer/Desktop/chrome-mac-x64/Google\ Chrome\ for\ Testing.app')  # You can use a different web driver based on your preference
-
-    try:
-        driver.get(url)
+    driver = setup_chrome_driver()
+    driver.get(url)
 
         # Get all search result elements
         search_results = driver.find_elements_by_class_name("search-result")
@@ -51,6 +54,5 @@ def scrape_stackoverflow_results(url):
         driver.quit()
 
 if __name__ == "__main__":
-    url = "https://stackoverflow.com/search?"
-    url2 = "&tab=Relevance&pagesize=50&q=readiness%20probe%20hasaccepted%3ayes&searchOn=3"
-    scrape_stackoverflow_results(build_url(url , ur12, page = 1))
+  base_url = "https://stackoverflow.com/search?page={}&tab=Relevance&pagesize=50&q=readiness%20probe%20hasaccepted%3ayes&searchOn=3"
+  scrape_stackoverflow_results(base_url.format(1))

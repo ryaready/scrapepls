@@ -18,12 +18,16 @@ def scrape_stackoverflow_results(url):
 
                 driver.get(url)
 
-                question_summary_element = driver.find_element(By.CLASS_NAME, "search-result")
-                question_summary = summary.question_summary_element.text.strip()
+                search_results = driver.find_element(By.CLASS_NAME, "flush-left js-search-results")
 
-                print("Question Summary:", summary)
 
-                title_element = summary_element.find_element(By.CLASS_NAME, "s-post-summary--content-title")
+                for result in search_results:
+                        question_summary_element = result.find_element(By.CLASS_NAME, "s-post-summary--content")
+                        question_summary = summary.question_summary_element.text.strip()
+
+                print("Question Summary:", question_summary)
+
+                title_element = question_summary_element.find_element(By.CLASS_NAME, "s-post-summary--content-title")
                 question_title = title_element.text.strip()
                 question_url = title_element.get_attribute("href")
 
@@ -56,7 +60,6 @@ def scrape_stackoverflow_results(url):
         finally:
 
                 driver.quit()
-
 
 if __name__ == "__main__":
 
